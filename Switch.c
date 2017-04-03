@@ -9,8 +9,8 @@
 #include "SysTick.h"
 #include "Music.h"
 
-#define PF1             (*((volatile uint32_t *)0x40025008))
-#define PF2             (*((volatile uint32_t *)0x40025010))
+#define PF1             (*((volatile uint32_t *)0x40025008)) // yellow LED
+#define PF2             (*((volatile uint32_t *)0x40025010)) // green LED
 #define PF3							(*((volatile uint32_t *)0x40025020))
 #define PF4   					(*((volatile uint32_t *)0x40025040))
 	
@@ -48,38 +48,21 @@ void PortF_Init() {
 	PF3 = 0;
 	PF4 = 0;
 }
-//pf4 for speaker, switches on pf0-3
 
-
-void GPIOPortF_Handler(void){		// PF4, PLAY/PAUSE switch
-  GPIO_PORTF_ICR_R = 0x10;      // acknowledge flag4
-	SysTick_Wait10ms(10);
-	if(GPIO_PORTF_DATA_R&0x10) {
-		PlayPressed = true;
-	}
+void LED_GreenOn() {
+	PF2 |= 0x04;
 }
 
-void ResetSwitches() {
-	PlayPressed = false;
-	RewindPressed = false;
-	ModePressed = false;
+void LED_GreenOff() {
+	PF2 &= ~0x04;
 }
 
-void CheckSwitches() {
-	if(PlayPressed) {
-		if(GetPlayState() == false) { // music not currently playing
-			PlaySong();
-		} else {
-			Pause();
-		}
-		ResetSwitches();
-	} else if(RewindPressed) {
-			Rewind(GetPlayState());
-			ResetSwitches();
-	} else if(ModePressed) {
-			ChangeTempo();
-			ResetSwitches();
-	}
-
+void LED_YellowOn() {
+	PF1 |= 0x02;
 }
+
+void LED_YellowOff() {
+	PF1 &= ~0x02; // = 0?
+}
+
 
