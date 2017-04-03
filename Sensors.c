@@ -10,6 +10,10 @@
 
 
 #define PE0       (*((volatile uint32_t *)0x40024004))
+	
+bool moist = true; // true if soil is moist
+bool changeOccurred = false; // true if soil has gone from moist to dry or vice versa
+
 
 // Initializes ADC2 (PE1,soil) and ADC1 (PE2,light) sampling
 // Initializes PE0 as output
@@ -79,6 +83,25 @@ void CheckSensors(){
 	ST7735_DrawString(0, 2, "Light:", ST7735_YELLOW);
 	ST7735_SetCursor(0,3); // added for testing
 	ST7735_OutUDec(light); // added for testing
+	
+	if( (soil <= 300) && moist) { // soil is now in a dry state
+		moist = false;
+		changeOccurred = true;
+	} else if( (soil >= 2000) && !moist) { // soil is now in a moist state
+		moist = true;
+		changeOccurred = true;
+	}
 	//Output moisture to server
-	//If threshold crossed, play song
+}
+
+void CheckMoisture() {
+	if(changeOccurred) { // soil moisture has changed
+		if(moist) { // soil is now moist
+			// play song for when soil is moist enough
+		} else { // soil is now dry
+			// play song for when soil is dry
+			// turn on LED to signal soil needs more water
+		}
+	}
+	changeOccurred = false; // we have acknowledged change
 }

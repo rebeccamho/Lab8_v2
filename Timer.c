@@ -84,19 +84,6 @@ void Timer0A_Handler(void){ // note length interrupt
   TIMER0_ICR_R = TIMER_ICR_TATOCINT;// acknowledge timer0A timeout
 	PF2 ^= 0x04;
 	CheckSensors();
-	/*
-	if(TimersDisabled) { return; }
-	if(Timer0Wait > 0) { // don't play anything
-		Timer0Wait = Timer0Wait - 1;
-		return;
-	}
-	// output next index of sine wave to DAC
-  OutputSine0();               // execute user task
-	Timer0Count = Timer0Count - 1;
-	if(Timer0Count == 0) {
-		Timer0SetNextNote();
-	}
-	*/
 }
 
 void Timers_Disable(void) {
