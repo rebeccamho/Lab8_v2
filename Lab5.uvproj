@@ -445,6 +445,16 @@
               <FileType>1</FileType>
               <FilePath>.\Timer.c</FilePath>
             </File>
+            <File>
+              <FileName>Sensors.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Sensors.c</FilePath>
+            </File>
+            <File>
+              <FileName>ST7735.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\ST7735.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>

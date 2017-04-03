@@ -39,6 +39,7 @@ Section Cross References
     music.o(i.Pause) refers to music.o(.data) for Play
     music.o(i.PlaySong) refers to timer.o(i.Timers_Enable) for Timers_Enable
     music.o(i.PlaySong) refers to startup.o(.text) for StartCritical
+    music.o(i.PlaySong) refers to timer.o(i.Timers_Disable) for Timers_Disable
     music.o(i.PlaySong) refers to fflt_clz.o(x$fpl$ffltu) for __aeabi_ui2f
     music.o(i.PlaySong) refers to fdiv.o(x$fpl$fdiv) for __aeabi_fdiv
     music.o(i.PlaySong) refers to ffixu.o(x$fpl$ffixu) for __aeabi_f2uiz
@@ -299,7 +300,7 @@ Removing Unused input sections from the image.
     Removing music.o(i.OutputSine0), (60 bytes).
     Removing music.o(i.OutputSine1), (72 bytes).
     Removing music.o(i.Pause), (36 bytes).
-    Removing music.o(i.PlaySong), (244 bytes).
+    Removing music.o(i.PlaySong), (176 bytes).
     Removing music.o(i.Rewind), (56 bytes).
     Removing music.o(i.Timer0SetNextNote), (64 bytes).
     Removing music.o(i.Timer1SetNextNote), (96 bytes).
@@ -342,7 +343,7 @@ Removing Unused input sections from the image.
     Removing st7735.o(i.fgetc), (6 bytes).
     Removing st7735.o(i.fputc), (16 bytes).
 
-52 unused section(s) (total 5024 bytes) removed from the image.
+52 unused section(s) (total 4956 bytes) removed from the image.
 
 ==============================================================================
 
