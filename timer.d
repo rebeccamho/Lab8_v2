@@ -4,3 +4,4 @@
 .\timer.o: ..\ValvanoWareTM4C123\ValvanoWareTM4C123\inc\tm4c123gh6pm.h
 .\timer.o: Music.h
 .\timer.o: SysTick.h
+.\timer.o: Sensors.h

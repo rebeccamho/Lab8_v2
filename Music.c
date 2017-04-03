@@ -55,7 +55,7 @@ Note Song[56] = {{C_low,2},{F_low,3},{F_low,1},{F_low,2},{A_mid,2},{G_mid,3},{F_
 		{G_mid,2},{A_mid,1},{G_mid,1},{F_low,3},{F_low,1},{E_low,4},{F_low,6}};
 
 int song_index = 0;		
-int song_size = 1;
+int song_size = 56;
 		
 Note Harmony[52] = {{C_low,2},{C_low,3},{C_low,1},{C_low,2},{F_low,2},{E_low,3},{D_low,1},{E_low,2},{E_low,2},
 		{F_low,3},{F_low,1},{F_low,2},{F_low,2},{F_low,6},{F_low,2},{F_low,3},{F_low,1},{F_low,2},{F_low,2},
@@ -150,19 +150,28 @@ void PlaySong() {
 
 	Play = true;
 	long sr = StartCritical();
-	song_index = song_index%song_size;
-	harmony_index = harmony_index%harmony_size;
+	//TODO
+	//if dry
+		//song_size == sunshine size
+	//else
+		//song_size == itsy bitsy size
+	
+	//STOPS song if we've reached the end of it
+	//needs to change to above code once new songs added
+	if(song_index >= 56){
+		Timers_Disable();
+		song_index = 0;
+		wave0_index = 0;
+		wave1_index = 0;
+		return;
+	}
+	
 	Note s = Song[song_index];
-	Note h = Harmony[harmony_index];
 	song_index++;
-	harmony_index++;
 	
 	uint32_t s_freq = BUS/s.freq; // frequency of DAC output
 	s_freq = s_freq/32; // sine wave has 32 pieces
-	
-	uint32_t h_freq = BUS/h.freq;
-	h_freq = h_freq/32;
-	
+		
 	// will interrupt n.freq*32 times a second, length is based on half a second 
 	// so halve 32 to 16
 	uint32_t s_count = s.freq*ONETWENTY_BPM*s.length; 
@@ -170,7 +179,6 @@ void PlaySong() {
 	//TEMPO
 	s_count = s_count/tempo;
 	
-	uint32_t h_count = h.freq*ONETWENTY_BPM*h.length;
 	uint32_t wait = 0;
 	
 	//Timer0A_SetReload(h_freq, h_count, wait);
@@ -198,6 +206,7 @@ Note GetNextNote(NoteType t) {
 }
 
 void Timer1SetNextNote() {
+	//TODO add if statement to get next note from appropriate song
 	Note n = GetNextNote(SongNote);
 	uint32_t freq = BUS/n.freq; // frequency of DAC output
 	freq = freq/32; // sine wave has 32 pieces
