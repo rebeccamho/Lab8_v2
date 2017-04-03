@@ -55,7 +55,7 @@ Note Song[56] = {{C_low,2},{F_low,3},{F_low,1},{F_low,2},{A_mid,2},{G_mid,3},{F_
 		{G_mid,2},{A_mid,1},{G_mid,1},{F_low,3},{F_low,1},{E_low,4},{F_low,6}};
 
 int song_index = 0;		
-int song_size = 1;
+int song_size = 56;
 		
 Note Harmony[52] = {{C_low,2},{C_low,3},{C_low,1},{C_low,2},{F_low,2},{E_low,3},{D_low,1},{E_low,2},{E_low,2},
 		{F_low,3},{F_low,1},{F_low,2},{F_low,2},{F_low,6},{F_low,2},{F_low,3},{F_low,1},{F_low,2},{F_low,2},
@@ -115,7 +115,7 @@ void OutputSine0(){ // harmony
 //}
 	
 void OutputSine1(bool end){ // melody
-	/*
+	
 	if(Play) {
 		wave1_index = wave1_index%32;
 		uint32_t val = wave1[wave1_index];
@@ -135,13 +135,13 @@ void OutputSine1(bool end){ // melody
 		DAC_Out(val);
 		wave1_index++;	
 	}	
-	*/
-	if(Play) { // testing purposes
-		wave1_index = wave1_index%32;
-		uint32_t val = wave1[wave1_index];
-		DAC_Out(val);
-		wave1_index++;
-	}
+	
+//	if(Play) { // testing purposes
+//		wave1_index = wave1_index%32;
+//		uint32_t val = wave1[wave1_index];
+//		DAC_Out(val);
+//		wave1_index++;
+//	}
 }
 
 	
