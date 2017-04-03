@@ -11,11 +11,11 @@
 // SS2 interrupts: enabled after 2nd sample but not promoted to controller
 void ADC_Init12(void);
 
-//------------ADC_In89------------
+//------------ADC_In12------------
 // Busy-wait Analog to digital conversion
 // Input: none
 // Output: two 12-bit result of ADC conversions
-// Samples ADC8 and ADC9 
+// Samples ADC1 and ADC2 
 // 125k max sampling
 // software trigger, busy-wait sampling
 // data returned by reference
@@ -28,6 +28,8 @@ void ADC_In12(uint32_t data[2]);
 // Inputs:  none
 // Outputs: none
 void CheckSensors(void);
+
+void CheckMoisture(void);
 
 void InitMoistureSensor(void);
 
