@@ -50,24 +50,6 @@ void PortF_Init() {
 }
 //pf4 for speaker, switches on pf0-3
 
-// PE0 is output, PE2-1 are input
-void PortE_Init() { 
-	SYSCTL_RCGCGPIO_R |= 0x10;		// activate clock for Port E
-	while((SYSCTL_PRGPIO_R&0x10)==0){}; 	// allow time for clock to start
-	GPIO_PORTE_DIR_R &= ~0x06;		// make PE2-1 in
-	GPIO_PORTE_AFSEL_R &= ~0x07;  // disable alt funct on PE2-0
-	GPIO_PORTE_AMSEL_R = 0;       // disable analog functionality on PE
-	GPIO_PORTE_PCTL_R &= ~0x07;		// configure PE2-0 as GPIO
-	GPIO_PORTE_DEN_R |= 0x07; 		// enable digital I/O on PE2-0
-//	GPIO_PORTE_IS_R &= ~0x30;			// PE5-4 is edge-sensitive
-//	GPIO_PORTE_IBE_R &= ~0x30;		// PE5-4 is not both edges
-//	GPIO_PORTE_IEV_R |= 0x30;			// PE5-4 rising edge event
-//	GPIO_PORTE_ICR_R = 0x30;			// clear flag5-4
-//	GPIO_PORTE_IM_R |= 0x30;			// arm interrupts on PE5-4
-//	NVIC_PRI1_R = (NVIC_PRI1_R&0xFFFFFF00)|0x00000040;	// PortE=priority 2
-//	NVIC_EN0_R = 1<<4; 	// enable interrupt 4 in NVIC
-}
-
 
 void GPIOPortF_Handler(void){		// PF4, PLAY/PAUSE switch
   GPIO_PORTF_ICR_R = 0x10;      // acknowledge flag4

@@ -19,9 +19,15 @@ void ADC_Init12(void);
 // 125k max sampling
 // software trigger, busy-wait sampling
 // data returned by reference
-// data[0] is ADC8 (PE5) 0 to 4095
-// data[1] is ADC9 (PE4) 0 to 4095
+// data[0] is ADC1 (PE2,light) 0 to 4095
+// data[1] is ADC2 (PE1,soil) 0 to 4095
 void ADC_In12(uint32_t data[2]);
+
+// ***************** CheckSensors ****************
+// Check soil moisture and light sensors
+// Inputs:  none
+// Outputs: none
+void CheckSensors(void);
 
 void InitMoistureSensor(void);
 

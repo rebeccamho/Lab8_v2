@@ -6,11 +6,13 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include "../ValvanoWareTM4C123/ValvanoWareTM4C123/inc/tm4c123gh6pm.h"
+#include "ST7735.h"
 
 
 #define PE0       (*((volatile uint32_t *)0x40024004))
 
 // Initializes ADC2 (PE1,soil) and ADC1 (PE2,light) sampling
+// Initializes PE0 as output
 // 125k max sampling
 // SS2 triggering event: software trigger, busy-wait sampling
 // SS2 1st sample source: Ain2 (PE1)
@@ -62,11 +64,21 @@ void ADC_In12(uint32_t data[2]){
   ADC0_ISC_R = 0x0004;             // 4) acknowledge completion
 }
 
-//Continuously(?) called in main
-void ReportMoisture(){
-	PE0 |= 0x01;
-	//Set PE0 high
-	//Read input from moisture sensor
+void CheckSensors(){
+	PE0 |= 0x01; // turn on soil sensor
+	uint32_t data[2];
+	ADC_In12(data);
+	uint32_t light = data[0];
+	uint32_t soil = data[1];
+	PE0 &= ~0x01; // turn off soil sensor
+	
+	ST7735_FillScreen(ST7735_BLACK); // added for testing
+	ST7735_DrawString(0, 0, "Soil moisture:", ST7735_YELLOW);
+	ST7735_SetCursor(0,1); // added for testing
+	ST7735_OutUDec(soil); // added for testing
+	ST7735_DrawString(0, 2, "Light:", ST7735_YELLOW);
+	ST7735_SetCursor(0,3); // added for testing
+	ST7735_OutUDec(light); // added for testing
 	//Output moisture to server
 	//If threshold crossed, play song
 }
