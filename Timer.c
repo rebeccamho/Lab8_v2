@@ -37,6 +37,7 @@
 
 #define PF1       (*((volatile uint32_t *)0x40025008))
 #define PF2       (*((volatile uint32_t *)0x40025010))
+#define SUNSHINE 1
 
 
 void DisableInterrupts(void); // Disable interrupts
@@ -128,6 +129,11 @@ void Timer1A_Init(uint32_t period){
   TIMER1_CTL_R = 0x00000001;    // 10) enable TIMER1A
 }
 
+//This interrupt occurs at the frequency of the current note
+//Each time this interrupt occurs, the next value of the sine wave is output to the DAC (using the OutputSine1 method)
+//After this interrupt has occurred the number of times that is appropriate based on the length of the note (Timer1Count),
+//it gets the next note.
+//This interrupt is currently always firing even when not playing music. It returns immediately when TimersDisabled
 void Timer1A_Handler(void){ // note frequency interrupt
   TIMER1_ICR_R = TIMER_ICR_TATOCINT;// acknowledge TIMER1A timeout
 	PF1 ^= 0x02;
@@ -145,6 +151,13 @@ void Timer1A_Handler(void){ // note frequency interrupt
 	}
 	Timer1Count = Timer1Count - 1;
 	if(Timer1Count == 0) {
+		//if(GetSong() == SUNSHINE){
+			//TO DO - set next note using sunshine
+		//}
+		//else{
+			//TO DO - set next note using other song
+			
+		//}
 		Timer1SetNextNote();
 	}
 	//PF1 ^= 0x02;
@@ -159,6 +172,8 @@ void Timer1A_Enable() {
 	Timer1Disabled = false;    // enable TIMER1A
 }
 
+//This method sets the length of the note (number of times the interrupt will happen before moving onto next note) Timer1Count,
+//and sets the frequency of the interrupt (the reload value).
 void Timer1A_SetReload(uint32_t period, uint32_t count, uint32_t wait) {
 	TIMER1_TAILR_R = period-1;    // reload value
 	Timer1Count = count;
