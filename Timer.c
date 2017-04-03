@@ -34,6 +34,7 @@
 #include "..\ValvanoWareTM4C123\ValvanoWareTM4C123\inc\tm4c123gh6pm.h"
 #include "Music.h"
 #include "SysTick.h"
+#include "Sensors.h"
 
 #define PF1       (*((volatile uint32_t *)0x40025008))
 #define PF2       (*((volatile uint32_t *)0x40025010))
@@ -61,7 +62,7 @@ bool TimersDisabled = false;
 // Inputs:  task is a pointer to a user function
 //          period in units (1/clockfreq), 32 bits
 // Outputs: none
-void Timer0A_Init(void(*task)(void), uint32_t period){long sr;
+void Timer0A_Init(uint32_t period){long sr;
   sr = StartCritical(); 
   SYSCTL_RCGCTIMER_R |= 0x01;   // 0) activate TIMER0
   TIMER0_CTL_R = 0x00000000;    // 1) disable TIMER0A during setup
@@ -81,6 +82,9 @@ void Timer0A_Init(void(*task)(void), uint32_t period){long sr;
 
 void Timer0A_Handler(void){ // note length interrupt
   TIMER0_ICR_R = TIMER_ICR_TATOCINT;// acknowledge timer0A timeout
+	PF2 ^= 0x04;
+	CheckSensors();
+	/*
 	if(TimersDisabled) { return; }
 	if(Timer0Wait > 0) { // don't play anything
 		Timer0Wait = Timer0Wait - 1;
@@ -92,6 +96,7 @@ void Timer0A_Handler(void){ // note length interrupt
 	if(Timer0Count == 0) {
 		Timer0SetNextNote();
 	}
+	*/
 }
 
 void Timers_Disable(void) {
@@ -124,7 +129,7 @@ void Timer1A_Init(uint32_t period){
   TIMER1_IMR_R = 0x00000001;    // 7) arm timeout interrupt
   NVIC_PRI5_R = (NVIC_PRI5_R&0xFFFF00FF)|0x00008000; // 8) priority 4
 // interrupts enabled in the main program after all devices initialized
-// vector number 37??, interrupt number 21
+// vector number 37, interrupt number 21
   NVIC_EN0_R = 1<<21;           // 9) enable IRQ 21 in NVIC
   TIMER1_CTL_R = 0x00000001;    // 10) enable TIMER1A
 }
@@ -136,6 +141,8 @@ void Timer1A_Init(uint32_t period){
 //This interrupt is currently always firing even when not playing music. It returns immediately when TimersDisabled
 void Timer1A_Handler(void){ // note frequency interrupt
   TIMER1_ICR_R = TIMER_ICR_TATOCINT;// acknowledge TIMER1A timeout
+	PF1 ^= 0x02;
+	/*
 	PF1 ^= 0x02;
 	//PF1 ^= 0x02;
 	if(TimersDisabled) { return; }
@@ -162,7 +169,9 @@ void Timer1A_Handler(void){ // note frequency interrupt
 	}
 	//PF1 ^= 0x02;
 	PF2 ^= 0x04;
+	*/
 }
+
 
 void Timer1A_Disable() {
 	Timer1Disabled = true;

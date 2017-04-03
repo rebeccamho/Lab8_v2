@@ -37,6 +37,8 @@
 #include "Switch.h"
 #include "SysTick.h"
 #include "Music.h"
+#include "Sensors.h"
+#include "ST7735.h"
 
 
 #define PF1       (*((volatile uint32_t *)0x40025008))
@@ -61,18 +63,18 @@ void WaitForInterrupt(void);  // low power mode
 //debug code
 int main(void){ 
   PLL_Init(Bus50MHz);              // bus clock at 50 MHz
+	Output_Init();
 	PortF_Init();
-	PortE_Init();
-  //Timer0A_Init(F1HZ);  // initialize timer0A (16 Hz)
-	Timer1A_Init(F1HZ);  // initialize timer0A (16 Hz)
+	ADC_Init12();
+  Timer0A_Init(F1HZ);  // initialize timer0A (16 Hz)
+	Timer1A_Init(F1HZ);  // initialize timer1A (16 Hz)
 	SysTick_Init();
-	//DAC_Init(0x1000);                  // initialize with command: Vout = Vref
-	DAC_Init(0x1000);
+	DAC_Init(0x1000);                  // initialize with command: Vout = Vref
   EnableInterrupts();
 	
 	//PlaySong();
   while(1){
-		CheckSwitches();
+	//CheckSwitches();
     WaitForInterrupt();
 		//if(becomeDry)
 			//play sunshine
