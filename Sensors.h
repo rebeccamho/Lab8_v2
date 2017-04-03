@@ -29,6 +29,8 @@ void ADC_In12(uint32_t data[2]);
 // Outputs: none
 void CheckSensors(void);
 
+void CheckMoisture(void);
+
 void InitMoistureSensor(void);
 
 void CalibrateMoistureSensor(void);

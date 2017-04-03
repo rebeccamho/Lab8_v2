@@ -75,6 +75,7 @@ int main(void){
 	//PlaySong();
   while(1){
 	//CheckSwitches();
+		CheckMoisture();
     WaitForInterrupt();
 		//if(becomeDry)
 			//play sunshine
