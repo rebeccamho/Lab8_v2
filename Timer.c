@@ -34,6 +34,7 @@
 #include "..\ValvanoWareTM4C123\ValvanoWareTM4C123\inc\tm4c123gh6pm.h"
 #include "Music.h"
 #include "SysTick.h"
+#include "Sensors.h"
 
 #define PF1       (*((volatile uint32_t *)0x40025008))
 #define PF2       (*((volatile uint32_t *)0x40025010))
@@ -81,6 +82,7 @@ void Timer0A_Init(uint32_t period){long sr;
 void Timer0A_Handler(void){ // note length interrupt
   TIMER0_ICR_R = TIMER_ICR_TATOCINT;// acknowledge timer0A timeout
 	PF2 ^= 0x04;
+	CheckSensors();
 	/*
 	if(TimersDisabled) { return; }
 	if(Timer0Wait > 0) { // don't play anything
