@@ -63,11 +63,10 @@ int main(void){
   PLL_Init(Bus50MHz);              // bus clock at 50 MHz
 	PortF_Init();
 	PortE_Init();
-  //Timer0A_Init(F1HZ);  // initialize timer0A (16 Hz)
-	Timer1A_Init(F1HZ);  // initialize timer0A (16 Hz)
+  Timer0A_Init(F1HZ/2);  // initialize timer0A (16 Hz)
+	Timer1A_Init(F1HZ);  // initialize timer1A (16 Hz)
 	SysTick_Init();
 	//DAC_Init(0x1000);                  // initialize with command: Vout = Vref
-	DAC_Init(0x1000);
   EnableInterrupts();
 	
 	//PlaySong();
