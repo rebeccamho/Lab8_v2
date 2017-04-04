@@ -68,7 +68,7 @@ void ResetSwitches() {
 void CheckSwitches() {
 	if(PlayPressed) {
 		if(GetPlayState() == false) { // music not currently playing
-			PlaySong();
+			//PlaySong();
 		} else {
 			Pause();
 		}

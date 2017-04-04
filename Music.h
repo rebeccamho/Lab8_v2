@@ -18,7 +18,7 @@ typedef enum NoteType NoteType;
 // Begins the song from current index
 // Inputs: none
 // Outputs: none
-void PlaySong(void);
+void PlaySong(int);
 
 // ***************** GetNextNote ****************
 // Gets the next note in the song

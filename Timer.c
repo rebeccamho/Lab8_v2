@@ -128,8 +128,8 @@ void Timer1A_Init(uint32_t period){
 //This interrupt is currently always firing even when not playing music. It returns immediately when TimersDisabled
 void Timer1A_Handler(void){ // note frequency interrupt
   TIMER1_ICR_R = TIMER_ICR_TATOCINT;// acknowledge TIMER1A timeout
-	PF1 ^= 0x02;
-	/*
+	//PF1 ^= 0x02;
+	
 	PF1 ^= 0x02;
 	//PF1 ^= 0x02;
 	if(TimersDisabled) { return; }
@@ -156,7 +156,7 @@ void Timer1A_Handler(void){ // note frequency interrupt
 	}
 	//PF1 ^= 0x02;
 	PF2 ^= 0x04;
-	*/
+	
 }
 
 

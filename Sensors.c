@@ -7,11 +7,14 @@
 #include <stdbool.h>
 #include "../ValvanoWareTM4C123/ValvanoWareTM4C123/inc/tm4c123gh6pm.h"
 #include "ST7735.h"
+#include "Music.h"
 
 
 #define PE0       (*((volatile uint32_t *)0x40024004))
+#define SUNSHINE 0
+#define ROWYOURBOAT 1
 	
-bool moist = true; // true if soil is moist
+bool moist = false; // true if soil is moist
 bool changeOccurred = false; // true if soil has gone from moist to dry or vice versa
 
 
@@ -97,10 +100,12 @@ void CheckSensors(){
 void CheckMoisture() {
 	if(changeOccurred) { // soil moisture has changed
 		if(moist) { // soil is now moist
+			PlaySong(SUNSHINE);
 			// play song for when soil is moist enough
 		} else { // soil is now dry
 			// play song for when soil is dry
 			// turn on LED to signal soil needs more water
+			PlaySong(ROWYOURBOAT);
 		}
 	}
 	changeOccurred = false; // we have acknowledged change
