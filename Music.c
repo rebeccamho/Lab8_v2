@@ -19,6 +19,10 @@ void WaitForInterrupt(void);  // low power mode
 
 #define BUS 50000000
 #define F2HZ BUS/2 	// tempo of 60 bpm
+#define SUNSHINE 0
+#define ROWYOURBOAT 1
+
+int whichSong = SUNSHINE;
 
 
 // define tempos
@@ -37,12 +41,13 @@ const uint16_t F_mid = 698;
 const uint16_t E_mid = 659;
 const uint16_t D_mid = 587;
 const uint16_t C_mid = 523;
+const uint16_t B_mid = 494;
 const uint16_t Bflat_mid = 466;
 const uint16_t A_mid = 440;
 const uint16_t G_mid = 392;
 const uint16_t F_low = 349;
 const uint16_t E_low = 330;
-const uint16_t D_low = 277;
+const uint16_t D_low = 293;
 const uint16_t C_low = 262;
 const uint16_t Bflat_low = 233;
 const uint16_t A_low = 220;
@@ -55,7 +60,16 @@ Note Song[56] = {{C_low,2},{F_low,3},{F_low,1},{F_low,2},{A_mid,2},{G_mid,3},{F_
 		{G_mid,2},{A_mid,1},{G_mid,1},{F_low,3},{F_low,1},{E_low,4},{F_low,6}};
 
 int song_index = 0;		
-int song_size = 1;
+int song_size = 56;
+		
+int sunshine_size = 19;
+Note Sunshine[19] = {{D_low,1},{G_mid,1},{A_mid,1},{B_mid,2},{B_mid,3},{B_mid,1},{Bflat_mid,1},{B_mid,1},{G_mid,2},{G_mid,3},
+	{G_mid,1},{A_mid,1},{B_mid,1},{C_mid,2},{E_mid,3},{E_mid,1},{D_mid,1},{C_mid,1},{B_mid,5}};
+
+int rowYourBoat_size = 27;
+Note RowYourBoat[27] = {{C_low,3},{C_low,3},{C_low,2},{D_low,1},{E_low,3},{E_low,2},{D_low,1},{E_low,2},{F_low,1},{G_mid,6},
+	{C_mid,1},{C_mid,1},{C_mid,1},{G_mid,1},{G_mid,1},{G_mid,1},{E_low,1},{E_low,1},{E_low,1},{C_low,1},{C_low,1},{C_low,1},
+		{G_mid,2},{F_low,1},{E_low,2},{D_low,1},{C_low,6}};
 		
 Note Harmony[52] = {{C_low,2},{C_low,3},{C_low,1},{C_low,2},{F_low,2},{E_low,3},{D_low,1},{E_low,2},{E_low,2},
 		{F_low,3},{F_low,1},{F_low,2},{F_low,2},{F_low,6},{F_low,2},{F_low,3},{F_low,1},{F_low,2},{F_low,2},
@@ -115,7 +129,7 @@ void OutputSine0(){ // harmony
 //}
 	
 void OutputSine1(bool end){ // melody
-	/*
+	
 	if(Play) {
 		wave1_index = wave1_index%32;
 		uint32_t val = wave1[wave1_index];
@@ -135,34 +149,42 @@ void OutputSine1(bool end){ // melody
 		DAC_Out(val);
 		wave1_index++;	
 	}	
-	*/
+	/*
 	if(Play) { // testing purposes
 		wave1_index = wave1_index%32;
 		uint32_t val = wave1[wave1_index];
 		DAC_Out(val);
 		wave1_index++;
 	}
+	*/
 }
 
 	
-void PlaySong() {
+void PlaySong(int whichS) {
 	Timers_Enable();
-
+	
 	Play = true;
 	long sr = StartCritical();
-	song_index = song_index%song_size;
-	harmony_index = harmony_index%harmony_size;
-	Note s = Song[song_index];
-	Note h = Harmony[harmony_index];
+	
+	whichSong = whichS;
+	Note s;
+	if(whichSong == SUNSHINE){
+		song_size = sunshine_size;
+		s = Sunshine[song_index];
+	}
+	else{
+		song_size = rowYourBoat_size;
+		s = RowYourBoat[song_index];
+	}
+		
+	
+	
+	//Note s = Sunshine[song_index];
 	song_index++;
-	harmony_index++;
 	
 	uint32_t s_freq = BUS/s.freq; // frequency of DAC output
 	s_freq = s_freq/32; // sine wave has 32 pieces
-	
-	uint32_t h_freq = BUS/h.freq;
-	h_freq = h_freq/32;
-	
+		
 	// will interrupt n.freq*32 times a second, length is based on half a second 
 	// so halve 32 to 16
 	uint32_t s_count = s.freq*ONETWENTY_BPM*s.length; 
@@ -170,7 +192,6 @@ void PlaySong() {
 	//TEMPO
 	s_count = s_count/tempo;
 	
-	uint32_t h_count = h.freq*ONETWENTY_BPM*h.length;
 	uint32_t wait = 0;
 	
 	//Timer0A_SetReload(h_freq, h_count, wait);
@@ -184,20 +205,34 @@ void PlaySong() {
 Note GetNextNote(NoteType t) {
 	long sr = StartCritical();
 	Note n;
-	if(t == SongNote) {
-		song_index = song_index%song_size;
-		n = Song[song_index];
-		song_index++;
-	} else {
-		harmony_index = harmony_index%harmony_size;
-		n = Harmony[harmony_index];
-		harmony_index++;
-	}
+	song_index = song_index;
+	if(whichSong == SUNSHINE)
+		n = Sunshine[song_index];
+	else
+		n = RowYourBoat[song_index];
+	song_index++;
+	
 	EndCritical(sr);
 	return n;
 }
 
 void Timer1SetNextNote() {
+	//TODO add if statement to get next note from appropriate song
+	//TODO
+	//if dry
+		//song_size == sunshine size
+	//else
+		//song_size == itsy bitsy size
+	
+	//STOPS song if we've reached the end of it
+	//needs to change to above code once new songs added
+	if(song_index >= song_size){
+		Timers_Disable();
+		song_index = 0;
+		wave0_index = 0;
+		wave1_index = 0;
+		return;
+	}
 	Note n = GetNextNote(SongNote);
 	uint32_t freq = BUS/n.freq; // frequency of DAC output
 	freq = freq/32; // sine wave has 32 pieces

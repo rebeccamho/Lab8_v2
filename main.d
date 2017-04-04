@@ -8,3 +8,5 @@
 .\main.o: Switch.h
 .\main.o: SysTick.h
 .\main.o: Music.h
+.\main.o: Sensors.h
+.\main.o: ST7735.h
