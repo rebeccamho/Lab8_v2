@@ -100,12 +100,12 @@ void CheckSensors(){
 void CheckMoisture() {
 	if(changeOccurred) { // soil moisture has changed
 		if(moist) { // soil is now moist
-			PlaySong(SUNSHINE);
+			PlaySong(ROWYOURBOAT);
 			// play song for when soil is moist enough
 		} else { // soil is now dry
 			// play song for when soil is dry
 			// turn on LED to signal soil needs more water
-			PlaySong(ROWYOURBOAT);
+			PlaySong(SUNSHINE);
 		}
 	}
 	changeOccurred = false; // we have acknowledged change
