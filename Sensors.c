@@ -111,13 +111,14 @@ void CheckSensors(){
 void CheckMoisture() {
 	if(changeOccurred) { // soil moisture has changed
 		if(moist) { // soil is now moist
-			PlaySong(ROWYOURBOAT);
+			PlaySong(SUNSHINE);
+			LED_GreenOff();
 			// play song for when soil is moist enough
 		} else { // soil is now dry
 			// play song for when soil is dry
 			// turn on LED to signal soil needs more water
 			LED_GreenOn();
-			PlaySong(SUNSHINE);
+			PlaySong(ROWYOURBOAT);
 		}
 	}
 	changeOccurred = false; // we have acknowledged change
@@ -131,10 +132,13 @@ void CheckLight() {
 		} else { // plant received enough light today
 			LED_YellowOff();
 		}
+		checkCount = 0;
+		adequateLightCount = 0;
 	}
 }
 
 void SetCheckFrequency(uint32_t freq) {
 	checkFrequency = freq; // checks/min
-	checksPerDay = checkFrequency*60*24; // checks/min * 60min/hour * 24hours/day
+	//checksPerDay = checkFrequency*60*24; // checks/min * 60min/hour * 24hours/day
+	checksPerDay = 2; // added for testing
 }

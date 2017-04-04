@@ -23,7 +23,7 @@ void WaitForInterrupt(void);  // low power mode
 #define ROWYOURBOAT 1
 
 int whichSong = SUNSHINE;
-
+bool songPlaying = false;
 
 // define tempos
 const uint16_t SIXTY_BPM = 32/2; // tempo of 60 bpm
@@ -162,7 +162,7 @@ void OutputSine1(bool end){ // melody
 	
 void PlaySong(int whichS) {
 	Timers_Enable();
-	
+	//songPlaying = true;
 	Play = true;
 	long sr = StartCritical();
 	
@@ -228,6 +228,7 @@ void Timer1SetNextNote() {
 	//needs to change to above code once new songs added
 	if(song_index >= song_size){
 		Timers_Disable();
+		Play = false;
 		song_index = 0;
 		wave0_index = 0;
 		wave1_index = 0;

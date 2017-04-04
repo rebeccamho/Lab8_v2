@@ -82,7 +82,7 @@ void Timer0A_Init(uint32_t period){long sr;
 
 void Timer0A_Handler(void){ // note length interrupt
   TIMER0_ICR_R = TIMER_ICR_TATOCINT;// acknowledge timer0A timeout
-	PF2 ^= 0x04;
+	//PF2 ^= 0x04;
 	CheckSensors();
 }
 
@@ -129,9 +129,7 @@ void Timer1A_Init(uint32_t period){
 void Timer1A_Handler(void){ // note frequency interrupt
   TIMER1_ICR_R = TIMER_ICR_TATOCINT;// acknowledge TIMER1A timeout
 	//PF1 ^= 0x02;
-	
-	PF1 ^= 0x02;
-	//PF1 ^= 0x02;
+
 	if(TimersDisabled) { return; }
 	if(Timer1Wait > 0) { // don't play anything
 		Timer1Wait = Timer1Wait - 1;
@@ -155,7 +153,7 @@ void Timer1A_Handler(void){ // note frequency interrupt
 		Timer1SetNextNote();
 	}
 	//PF1 ^= 0x02;
-	PF2 ^= 0x04;
+	//PF2 ^= 0x04;
 	
 }
 

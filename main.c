@@ -61,13 +61,14 @@ void WaitForInterrupt(void);  // low power mode
 #define F10KHZ (50000000/10000)
 #define F1HZ 50000000
 #define F100mHZ 50000000*10
+#define F50mHZ 50000000*5
 //debug code
 int main(void){ 
   PLL_Init(Bus50MHz);              // bus clock at 50 MHz
 	Output_Init();
 	PortF_Init();
 	ADC_Init12();
-  Timer0A_Init(F100mHZ);  // initialize timer0A (16 Hz)
+  Timer0A_Init(F50mHZ);  // initialize timer0A (16 Hz)
 	Timer1A_Init(F1HZ);  // initialize timer1A (16 Hz)
 	SysTick_Init();
 	DAC_Init(0x1000);  // initialize with command: Vout = Vref
@@ -75,7 +76,9 @@ int main(void){
   EnableInterrupts();
 	
   while(1){
-		CheckMoisture();
+		if(!GetPlayState()) {
+			CheckMoisture();
+		}
 		CheckLight();
     WaitForInterrupt();
 		//if(becomeDry)

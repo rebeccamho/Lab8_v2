@@ -29,7 +29,7 @@ void PortF_Init() {
 
 
 	PF1 = 0;	// turn off LED
-	PF2 = 0;	
+	PF2 |= 0x04;	
 	PF3 = 0;
 	PF4 = 0;
 }
@@ -39,7 +39,7 @@ void LED_GreenOn() {
 }
 
 void LED_GreenOff() {
-	PF2 &= ~0x04;
+	PF2 = 0;
 }
 
 void LED_YellowOn() {
@@ -48,7 +48,8 @@ void LED_YellowOn() {
 
 
 void LED_YellowOff() {
-	PF1 &= ~0x02; // = 0?
+	//PF1 &= ~0x02; // = 0?
+	PF1 = 0;
 }
 
 
