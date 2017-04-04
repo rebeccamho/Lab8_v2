@@ -10,27 +10,26 @@
 // Output: none
 void PortF_Init(void);
 
-//------------PortE_Init------------
-// Initialization of PortE, making PE5-4 inputs
-// with interrupts on a rising event
+//------------LED_GreenOn------------
+// Make PF2 high, turning on green LED.
 // Input: none
 // Output: none
-void PortE_Init(void);
+void LED_GreenOn(void);
 
-//------------GPIOPortE_Handler------------
-// Handles interrupts on PE5-4
+//------------LED_GreenOff------------
+// Make PF2 low, turning off green LED.
 // Input: none
 // Output: none
-void GPIOPortE_Handler(void);
+void LED_GreenOff(void);
 
-//------------GPIOPortF_Handler------------
-// Handles interrupts PF4
+//------------LED_YellowOn------------
+// Make PF1 high, turning on yellow LED.
 // Input: none
 // Output: none
-void GPIOPortF_Handler(void);
+void LED_YellowOn(void);
 
-//------------CheckSwitches------------
-// Checks if a switch has been pressed
+//------------LED_YellowOff------------
+// Make PF1 low, turning off yellow LED.
 // Input: none
 // Output: none
-void CheckSwitches(void);
+void LED_YellowOff(void);

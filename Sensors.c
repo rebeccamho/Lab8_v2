@@ -1,4 +1,4 @@
-// filename ******** MoistureSensor.c ************** 
+// filename ******** Sensors.c ************** 
 // Lab 8 Spring 2017
 // Matt Owens & Rebecca Ho
 // 3/29/17
@@ -7,13 +7,18 @@
 #include <stdbool.h>
 #include "../ValvanoWareTM4C123/ValvanoWareTM4C123/inc/tm4c123gh6pm.h"
 #include "ST7735.h"
+#include "Switch.h"
 
 
 #define PE0       (*((volatile uint32_t *)0x40024004))
 	
 bool moist = true; // true if soil is moist
 bool changeOccurred = false; // true if soil has gone from moist to dry or vice versa
-
+uint32_t checkFrequency = 0; // number of checks per minute
+uint32_t checksPerDay = 0;
+uint32_t checkCount = 0;
+uint32_t adequateLightCount = 0;
+uint32_t adequateLightPercent = 30; // percentage of the day for which plant needs to be receiving adequate light
 
 // Initializes ADC2 (PE1,soil) and ADC1 (PE2,light) sampling
 // Initializes PE0 as output
@@ -92,6 +97,12 @@ void CheckSensors(){
 		changeOccurred = true;
 	}
 	//Output moisture to server
+	
+	if(light >= 600) { // plant is receiving enough light
+		adequateLightCount++;
+	}
+	checkCount++;
+
 }
 
 void CheckMoisture() {
@@ -101,7 +112,24 @@ void CheckMoisture() {
 		} else { // soil is now dry
 			// play song for when soil is dry
 			// turn on LED to signal soil needs more water
+			LED_GreenOn();
 		}
 	}
 	changeOccurred = false; // we have acknowledged change
+}
+
+void CheckLight() {
+	if(checkCount == checksPerDay) { // reached end of day
+		uint32_t percentAdequateLight = (adequateLightCount*100)/checksPerDay;
+		if(percentAdequateLight < adequateLightPercent) { // plant did not receive enough light today
+			LED_YellowOn();
+		} else { // plant received enough light today
+			LED_YellowOff();
+		}
+	}
+}
+
+void SetCheckFrequency(uint32_t freq) {
+	checkFrequency = freq; // checks/min
+	checksPerDay = checkFrequency*60*24; // checks/min * 60min/hour * 24hours/day
 }

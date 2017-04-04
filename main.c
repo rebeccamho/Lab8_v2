@@ -69,13 +69,13 @@ int main(void){
   Timer0A_Init(F1HZ);  // initialize timer0A (16 Hz)
 	Timer1A_Init(F1HZ);  // initialize timer1A (16 Hz)
 	SysTick_Init();
-	DAC_Init(0x1000);                  // initialize with command: Vout = Vref
+	DAC_Init(0x1000);  // initialize with command: Vout = Vref
+	SetCheckFrequency(6); // 6 sensor checks being done per minute
   EnableInterrupts();
 	
-	//PlaySong();
   while(1){
-	//CheckSwitches();
 		CheckMoisture();
+		CheckLight();
     WaitForInterrupt();
 		//if(becomeDry)
 			//play sunshine

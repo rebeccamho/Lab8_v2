@@ -1,4 +1,4 @@
-// filename ******** MoistureSensor.h ************** 
+// filename ******** Sensors.h ************** 
 // Lab 8 Spring 2017
 // Matt Owens & Rebecca Ho
 // 3/29/17
@@ -29,10 +29,17 @@ void ADC_In12(uint32_t data[2]);
 // Outputs: none
 void CheckSensors(void);
 
+// ***************** CheckMoisture ****************
+// Check if soil moisture has changed. Output song if it has.
+// Turn on green LED if soil is now dry.
+// Inputs:  none
+// Outputs: none
 void CheckMoisture(void);
 
-void InitMoistureSensor(void);
+// ***************** CheckLight ****************
+// Check if enough light is being received by the plant
+// Inputs:  none
+// Outputs: none
+void CheckLight(void);
 
-void CalibrateMoistureSensor(void);
-
-void ReportMoistureStatus(void);
+void SetCheckFrequency(uint32_t);
